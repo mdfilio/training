@@ -1,6 +1,4 @@
 
-
-
 I. Title Slide
 
 The Web and Nginx for Linux SysAds
@@ -77,8 +75,8 @@ FIN/ACK
 
 
 
+VII. HTTP
 
-V. What happens when you make a browser request (Linux) 
 
 HTTP protocols
 HTTP 1.0 May 1996
@@ -107,7 +105,7 @@ HTTP 2
    Header Compression
         HPACK - protocol for encoding the binary headers - https://http2.github.io/http2-spec/compression.html
    Mandatory SSL - RFC does not mandate it, but chrome and firefox will only support http2 with ssl
-      * google does give higher rankings to sites that are encypted
+      * google does give higher rankings to sites that are encrypted
 
 
    *** It is not backwards compatible with 1.1
@@ -119,10 +117,10 @@ HTTP 2
 
     No push server yet
 
-ssl streaming doesn't work well
+    streaming doesn't work well over ssl
 
     15 - 20% gain over just https
-    Mainly think it's a mainly wash on just http but depends on content and architecture
+    Mainly think it's a mainly wash on just http but depends on content and architecture.
 
 
     Other implications:
@@ -130,11 +128,9 @@ ssl streaming doesn't work well
 
 
 
-
-
+V. What happens when you make a browser request (Linux) 
 
 1) URL in browser
 2) DNS
    * /etc/nsswitch.conf - Name Service Switch
      hosts: files dns
-

@@ -1,6 +1,34 @@
-day 1 written by end of month
+day 1 written by end of month (that was end of Oct -i'm behind 11/12)
+=========================================
+Structure notes 10/15
+
+Lab Structure
+1 hour sessions
+Delivered by mentor to their assigned mentee's
+2-3 Sys Ads only 
+Hands on/Demos and/or visual presentation 
+
+Scheduling
+30 day sprints of the same material (teach same lab to all techs for the month, move on to next lab the following month, etc)
+
+Additional Teaching Resources
+Battle cards (optional)
+Printed lab material (thoughts?)
+
+Day 1 Training (45 minutes of discussion/15 minutes of Q/A) – Introduction to Nginx
+	What it is?
+	Why it’s different?
+	Purpose of it’s creation?
+	How it’s organized?
+	How some of our customers use it today
+	Present any customer examples that use Nginx
 
 
+* Convert ontent into reveal.js
+* Use TermRecord for labs instead of asciicinema
+
+
+=========================================
 
 NginX notes
 ----------------------
@@ -27,11 +55,6 @@ There's three main ways to install nginx:
 	OS repo
 	nginx repo
 	source
-
-We 
-
-
-
 
 
 

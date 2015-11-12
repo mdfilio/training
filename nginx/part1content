@@ -1,0 +1,140 @@
+
+
+
+I. Title Slide
+
+The Web and Nginx for Linux SysAds
+
+Michael Filio
+
+
+II. What's in this training and why?
+   
+   Why?
+   * Lots of new admins without a fundamental background in the internet and webhosting technologies.
+   * Increasing market share of Nginx is making it more important to know.
+        From Jan to Oct 2015 14% - 16% or 128mil to 146mil (Netcraft)
+   
+   What?
+   * Basic Internet and networking architecture.
+   * Provide some insight into web application architecture for sysadmins with no developer experience.
+   * Cover the fundamental differences between Nginx and Apache.
+   * Provide an introduction to Nginx and provide resources for more information.
+   * Basic system tuning including kernel tunables and file systems.
+
+   Part II will be labs, with Nginx configuration.
+
+III. Networking
+
+Without Networking there is no Internet or web sites.
+
+You should know some basic vocabulary about networking and how it functions. 
+Particularly the OSI and TCP/IP models.
+
+Not going to go into too much depth on the models, but this diagram is great.
+
+http://www.inetdaemon.com/img/network_models.png
+
+IV. Protocols
+
+	IP/ICMP - Networking (Layer 3)
+	TCP/UDP - Transport (Layer 4)
+	DNS/HTTP - Application (Layer 7)
+
+If there are problems with any of these you don't get your webpage.
+
+V. DNS
+
+
+
+VI. TCP
+
+As HTTP sits on top of TCP a brief mention here is needed.
+
+TCP as a protocol uses connections that does error handling to make sure data arrives correctly.
+
+As part of this process, it establishes a connection with the '3 way handshake'
+
+Opening: 
+
+Client -> SYN (Synchronize) -> Server
+Client <- SYN / ACK (Acknowledge) <- Server
+Client -> ACK -> Server
+
+
+Client -> HTTP Request -> Server
+Client <- HTTP Response <- Server
+
+In progress:
+
+ESTABLISHED
+TIME_WAIT
+
+Closing 
+
+FIN
+FIN/ACK
+
+
+
+
+V. What happens when you make a browser request (Linux) 
+
+HTTP protocols
+HTTP 1.0 May 1996
+HTTP 1.1 last update June 1999
+  One request per TCP connection
+  * HTTP pipelining - not practical
+  * Client browsers just use mutliple connections instead (6)
+     * Domain sharding - different subdomains so more connections made
+     * Concatenation - Combine resources (CSS, JS, images) into a single larger resource
+        Cons
+           - poor cache utilization - one update means entire resource needs to be refreshed
+           - delays - must download entire resource before any part of it can be used
+     * Inlining - embed directly inside HTML
+        Cons
+           - duplication - has to be inlined everywhere it is used
+
+HTTP 2
+   Based on SPDY developed by Google since 2009
+   Multiple requests over single TCP connection
+   Out of order completion
+   Headers no longer plain text but in binary format
+   Request Prioritization
+      * can weight content and assin dependencies
+   Server Push
+      * Server can push resources before client requests it
+   Header Compression
+        HPACK - protocol for encoding the binary headers - https://http2.github.io/http2-spec/compression.html
+   Mandatory SSL - RFC does not mandate it, but chrome and firefox will only support http2 with ssl
+      * google does give higher rankings to sites that are encypted
+
+
+   *** It is not backwards compatible with 1.1
+       Negotiation - ALPN (OpenSSL 1.0.2)
+                   - NPN (OpenSSL 1.0.1)
+
+
+    1.9.5 is built against 1.0.1 ssl
+
+    No push server yet
+
+ssl streaming doesn't work well
+
+    15 - 20% gain over just https
+    Mainly think it's a mainly wash on just http but depends on content and architecture
+
+
+    Other implications:
+    	RHEL7 is still on 1.0.1 for OpenSSL, curl is 7.29, support for http2 not until 7.36.0, etc.
+
+
+
+
+
+
+1) URL in browser
+2) DNS
+   * /etc/nsswitch.conf - Name Service Switch
+     hosts: files dns
+

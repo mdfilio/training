@@ -153,8 +153,20 @@ IX. HTTP 2 as it is in nginx
 
 
 X. Web Server processing
+
+    1) Accept the connection
+    2) Receive the HTTP request
+    3) Process the request
+    4) Access and map the resources
+       a. uri to filename translation
+       b. access permisions  
+    5) Build the response
+       a. module processing - handlers
+    6) Send the response
+    7) Logging
    
 XI. Browser rendering
+
 
 
 XII. End of web infrastructure slide. 

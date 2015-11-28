@@ -115,7 +115,7 @@ HTTP 1.1 last update June 1999
         Cons
            - duplication - has to be inlined everywhere it is used
 
-HTTP 2 is here and coming soon. as of nginx 1.9.5 supports it. Current mainline is now 1.9.6 as of 10/27.
+HTTP 2 is here and coming soon as of 1.9.5 nginx supports it. Current mainline is now 1.9.6 as of 10/27.
 
 
 VIII. HTTP 2
@@ -142,7 +142,7 @@ HTTP 2
     
 IX. HTTP 2 as it is in nginx
 
-    1.9.5 is built against 1.0.1 OpenSSL.
+    1.9.5/6 is built against 1.0.1 OpenSSL.
     Only built for incoming connections, not backend, also only with ssl enabled. 
     No server push yet.
     Likely have 15 - 20% gain over just https.
@@ -167,7 +167,10 @@ X. Web Server processing
    
 XI. Browser rendering
 
+    1) Critical Rendering Path
+        Network -> DOM/CSSOM -> JavaScript -> RenderTree -> Layout -> Paint
 
+    CSS at the top. JavaScript at the bottom.
 
 XII. End of web infrastructure slide. 
 
@@ -183,4 +186,4 @@ What happens when you make a browser request
 6) Browser rendering
 
 
-XII.
+XII. 

@@ -139,7 +139,6 @@ is now 1.9.9 as of 12/09/2015.
 
 # VIII. HTTP 2
 
-**HTTP 2**
 * Based on SPDY developed by Google since 2009
 * Multiple requests over single TCP connection
 * Out of order completion
@@ -169,43 +168,42 @@ is now 1.9.9 as of 12/09/2015.
 * Likely have 15 - 20% gain over just https.
 * Streaming doesn't work well over ssl and so no real performance gains
   if that's your model.
-
 * Other implications:
   * RHEL7 is still on 1.0.1 for OpenSSL, curl is 7.29, support for http2
   not until 7.36.0, etc.
 
 # X. Web Server processing
 
-1) Accept the connection
-2) Receive the HTTP request
-3) Process the request
-4) Access and map the resources
+1. Accept the connection
+2. Receive the HTTP request
+3. Process the request
+4. Access and map the resources
    * uri to filename translation
    * access permisions
-5) Build the response
+5. Build the response
    * module processing - handlers
-6) Send the response
-7) Logging
+6. Send the response
+7. Logging
 
 # XI. Browser rendering
 
-1) Critical Rendering Path
+Critical Rendering Path
   * Network -> DOM/CSSOM -> JavaScript -> RenderTree -> Layout -> Paint
 
 *CSS at the top. JavaScript at the bottom.*
 
-# XII. End of web infrastructure slide.
+# XII. Summary of web infrastructure
 
 Tying it all together...
 
 What happens when you make a browser request:
 
-1) URL in browser
-2) DNS
-3) Establish TCP connection and get initial html
-4) Make additional requests for items on page (6 on current versions of
+1. URL in browser
+2. DNS
+3. Establish TCP connection and get initial html
+4. Make additional requests for items on page (6 on current versions of
    firefox and chrome)
-5) Webserver processing
-6) Browser rendering
+5. Webserver processing
+6. Browser rendering
 
 # XII. nginx

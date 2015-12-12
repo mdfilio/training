@@ -149,7 +149,7 @@ is now 1.9.9 as of 12/09/2015.
   * Server can push resources before client requests it.
 * Header Compression
   * HPACK - protocol for encoding the binary headers
-  https://http2.github.io/http2-spec/compression.html
+  [Read more](https://http2.github.io/http2-spec/compression.html)
 * Mandatory SSL
   * RFC does not mandate it, but chrome and firefox will only support http2
     with ssl
@@ -191,6 +191,8 @@ Critical Rendering Path
 
 ![Critical Rendering Path](http://www.igvita.com/posts/12/doc-render-js.png)
 
+[Read more](https://developers.google.com/web/fundamentals/performance/)
+
 *CSS at the top. JavaScript at the bottom.*
 
 # XII. Summary of web infrastructure
@@ -207,4 +209,8 @@ What happens when you make a browser request:
 5. Webserver processing
 6. Browser rendering
 
-# XIII. nginx
+# XIII. Sources
+
+
+
+# XIV. nginx

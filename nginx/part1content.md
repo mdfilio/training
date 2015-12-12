@@ -1,4 +1,3 @@
-
 # I. The Web and Nginx for Linux SysAds (Part I)
 
 **The Web and Nginx for Linux SysAds (Part I)**
@@ -35,7 +34,7 @@ Particularly the OSI and TCP/IP models.
 
 Not going to go into too much depth on the models, but this diagram is great.
 
-http://www.inetdaemon.com/img/network_models.png
+![OSI and TCP/IP Model](http://www.inetdaemon.com/img/network_models.png)
 
 # IV. Protocols
 
@@ -90,26 +89,27 @@ After the connection is open the HTTP traffic is sent.
 Client -> HTTP Request -> Server
 Client <- HTTP Response <- Server
 ```
-In progress:
-
-```
-ESTABLISHED
-```
-
 Closing:
 
 ```
 Server -> FIN/ACK -> Client
 Server <- ACK <- Client
+
 Server <- FIN/ACK <- Client
 Server -> ACK -> Client
 ```
 
-TIME_WAIT (Linux has a hard coded value for 60 seconds)
-* The OS keeps the connection locally to prevent reusing it and getting errant
-packets from a previous TCP session.
+Common admin error using ss or netstat (This IP is DOS'ing me!):
 
 So what's wrong with your netstat one liners?
+
+```
+ESTABLISHED
+TIME_WAIT (Linux has a hard coded value for 60 seconds)
+```
+
+**TIME_WAIT** The OS keeps the connection locally to prevent reusing it and
+getting errant packets from a previous TCP session.
 
 # VII. HTTP
 
@@ -179,7 +179,7 @@ is now 1.9.9 as of 12/09/2015.
 3. Process the request
 4. Access and map the resources
    * uri to filename translation
-   * access permisions
+   * access permissions
 5. Build the response
    * module processing - handlers
 6. Send the response
@@ -188,7 +188,8 @@ is now 1.9.9 as of 12/09/2015.
 # XI. Browser rendering
 
 Critical Rendering Path
-  * Network -> DOM/CSSOM -> JavaScript -> RenderTree -> Layout -> Paint
+
+![Critical Rendering Path](http://www.igvita.com/posts/12/doc-render-js.png)
 
 *CSS at the top. JavaScript at the bottom.*
 
@@ -206,4 +207,4 @@ What happens when you make a browser request:
 5. Webserver processing
 6. Browser rendering
 
-# XII. nginx
+# XIII. nginx

@@ -189,9 +189,12 @@ is now 1.9.9 as of 12/09/2015.
 
 Critical Rendering Path
 
+[Read more](http://calendar.perfplanet.com/2012/deciphering-the-critical-rendering-path/)
+
 ![Critical Rendering Path](http://www.igvita.com/posts/12/doc-render-js.png)
 
-[Read more](https://developers.google.com/web/fundamentals/performance/)
+
+[Read even more](https://developers.google.com/web/fundamentals/performance/)
 
 *CSS at the top. JavaScript at the bottom.*
 

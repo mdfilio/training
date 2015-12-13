@@ -214,4 +214,6 @@ What happens when you make a browser request:
 
 # XIII. Sources
 
+I stole all this information from the following:
+
 # XIV. nginx

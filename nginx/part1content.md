@@ -198,7 +198,7 @@ Critical Rendering Path
 
 *CSS at the top. JavaScript at the bottom.*
 
-# XII. Summary of web infrastructure
+# XII. The browser request
 
 Tying it all together...
 
@@ -213,7 +213,5 @@ What happens when you make a browser request:
 6. Browser rendering
 
 # XIII. Sources
-
-
 
 # XIV. nginx

@@ -216,4 +216,18 @@ What happens when you make a browser request:
 
 I stole all this information from the following:
 
+[HTTP The Definitive Guide](http://shop.oreilly.com/product/9781565925090.do)
+[HTTP Essentials](http://www.amazon.com/HTTP-Essentials-Protocols-Secure-Scaleable/dp/0471398233)
+[High Performance Websites](http://shop.oreilly.com/product/9780596529307.do)
+[Even Faster Websites](http://shop.oreilly.com/product/9780596522315.do)
+[High-Performance Browser Networking](https://www.igvita.com/)
+[What's new in HTTP/2?](https://www.nginx.com/resources/webinars/whats-new-in-http2/)
+[HTTP/2: Ask me anything](https://www.nginx.com/resources/webinars/http2-ask-me-anything/)
+[HTTP/2 is Here, Let's Optimize!](HTTP/2 is Here, Let's Optimize!)
+
+Some additional resources:
+
+[The TCP/IP Guide](http://www.tcpipguide.com/)
+[InetDaemon.Com](http://www.inetdaemon.com/)
+
 # XIV. nginx

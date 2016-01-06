@@ -338,7 +338,7 @@ ssl_session_timeout 60m;
 ssl_dhparam /etc/nginx/dhparam.pem;
 
 #for oscp stapling
-resolver 72.3.128.241;
+resolver 72.3.128.241 72.3.128.240;
 ```
 
 One liner to test oscp:
@@ -355,9 +355,9 @@ involvement. One example for a Content-Security-Policy header:
 add_header Content-Security-Policy "default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self'; connect-src 'self' https://apis.google.com; object-src 'none' ";
 ```
 
-There's also a couple of fields for the *Set-Cookie* header to make sure web the
-application cookies are only transferred over https. This in general should be
-applied by the developer in the application, but you can modify it on the web
+There's also a couple of fields for the **Set-Cookie** header to make sure the
+web application cookies are only transferred over https. This in general should
+be applied by the developer in the application, but you can modify it on the web
 server level.
 
 ```

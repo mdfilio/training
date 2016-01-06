@@ -307,10 +307,6 @@ There's a lot to configure for SSL/TLS these days. The actual configuration
 syntax in nginx is simple, but everything that you might want to do is now quite
 extensive.
 
-Beyond the standard cipher configuration if you want an A+ on SSLlabs then you
-will need to generate diffie-helman parameters with a 2048 bit key. In addition,
-there's also these other security practices that can be implemented:
-
 * **OSCP** - Online Certificate Status Protocol
   * Checking for certificate is revoked
 * **HSTS** - HTTP Strict Transport Security
@@ -321,6 +317,11 @@ there's also these other security practices that can be implemented:
   * To prevent XSS type attacks
 * **Set-Cookie** - An HTTP header
   * To secure cookies are only transferred over https
+
+To get an A+ with SSLlabs you will need to have a 2048 bit diffie-helman params
+or eliminate those ciphers, and likely the **HSTS** header as well.
+
+The server config:
 
 ```
 listen 443 ssl http2 default_server;

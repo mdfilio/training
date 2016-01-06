@@ -311,15 +311,15 @@ Beyond the standard cipher configuration if you want an A+ on SSLlabs then you
 will need to generate diffie-helman parameters with a 2048 bit key. In addition,
 there's also these other security practices that can be implemented:
 
-* OSCP - Online Certificate Status Protocol
+* **OSCP** - Online Certificate Status Protocol
   * Checking for certificate is revoked
-* HSTS - HTTP Strict Transport Security
+* **HSTS** - HTTP Strict Transport Security
   * Prevent man in the middle attacks
-* HPKP - HTTP Public Key Pinning
+* **HPKP** - HTTP Public Key Pinning
   * If your CA is compromised
-* CSP - Content Security Policy
+* **CSP** - Content Security Policy
   * To prevent XSS type attacks
-* Set-Cookie - An HTTP header
+* **Set-Cookie** - An HTTP header
   * To secure cookies are only transferred over https
 
 ```

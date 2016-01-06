@@ -303,22 +303,47 @@ it. It is most likely mod_fcgid timeouts.
 
 # nginx ssl / http2
 
-Configuration for this is extremely simple (in your server configuration):
+There's a lot to configure for SSL/TLS these days. The actual configuration
+syntax in nginx is simple, but everything that you might want to do is now quite
+extensive.
+
+Beyond the standard cipher configuration if you want an A+ on SSLlabs then you
+will need to generate diffie-helman parameters with a 2048 bit key. In addition,
+there's also these other security practices that can be implemented:
+
+* OSCP - Online Certificate Status Protocol
+  * Checking for certificate is revoked
+* HSTS - HTTP Strict Transport Security
+  * Prevent man in the middle attacks
+* HPKP - HTTP Public Key Pinning
+  * If your CA is compromised
+* CSP - Content Security Policy
+  * To prevent XSS type attacks
+* Set-Cookie - An HTTP header
+  * To secure cookies are only transferred over https
 
 ```
 listen 443 ssl http2 default_server;
 server_name  www.filio.us filio.us;
 ssl_certificate /etc/pki/tls/certs/filio.us.crt;
 ssl_certificate_key /etc/pki/tls/private/filio.us.key;
+
 #oscp - online certificate status protocol
 ssl_stapling on;
 ssl_stapling_verify on;
 ssl_trusted_certificate /etc/pki/tls/certs/startssl.ca.certs.pem;
+
 #hsts - http strict transport security
 # preload : https://hstspreload.appspot.com/
 add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; always";
 # example preload
 #add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; always; preload";
+
+#hpkp - http public key pinning
+set $hpkp1 'pin-sha256="qDo23MpsRAXCSsMMvQRZ5WSa2IlR7p7xUFaN4roiPhQ=";';
+set $hpkp2 'pin-sha256="bUt20Xnw2ji4KxfgpzFl53EGeSIFX2cHXaEy45foM5A=";';
+set $hpkp3 'pin-sha256="omFq/rCHiz9sUsCxK56w3RGMp15ApJ0lEi6z32xO/zU=";';
+add_header Public-Key-Pins "$hpkp1 $hpkp2 $hpkp3 max-age=31536000; includeSubDomains";
 ```
 
 I did a ssl_common.conf as well:
@@ -347,18 +372,24 @@ One liner to test oscp:
 echo QUIT | openssl s_client -connect filio.us:443 -status 2> /dev/null | grep -A 17 'OCSP response:' | grep -B 17 'Next Update'
 ```
 
-For the even more paranoid, there is now HPKP (http public key pinning) as well
-as solutions like CSP (content security policy) which require more developer
-involvement. One example for a Content-Security-Policy header:
+One liner to get base64 hash from csr for HPKP (broken up on the pipes):
+```
+ openssl req -inform pem -pubkey -noout < filio.us.csr
+   | openssl pkey -pubin -outform der
+   | openssl dgst -sha256 -binary
+   | base64
+```
+
+One example for a Content-Security-Policy header:
 
 ```
 add_header Content-Security-Policy "default-src 'self'; script-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self'; connect-src 'self' https://apis.google.com; object-src 'none' ";
 ```
 
-There's also a couple of fields for the **Set-Cookie** header to make sure the
-web application cookies are only transferred over https. This in general should
-be applied by the developer in the application, but you can modify it on the web
-server level.
+Finally, the the **Set-Cookie** header. This in general should be applied by the
+developer in the application, but you can modify it on the web server level and
+may now pop up in PCI scans. The two additional arguments that would need to
+be appended to the existing header:
 
 ```
 httponly; secure

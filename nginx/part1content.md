@@ -336,7 +336,7 @@ ssl_trusted_certificate /etc/pki/tls/certs/startssl.ca.certs.pem;
 
 #hsts - http strict transport security
 # preload : https://hstspreload.appspot.com/
-add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; always";
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 # example preload
 #add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; always; preload";
 

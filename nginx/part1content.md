@@ -338,7 +338,7 @@ ssl_trusted_certificate /etc/pki/tls/certs/startssl.ca.certs.pem;
 # preload : https://hstspreload.appspot.com/
 add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 # example preload
-#add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; always; preload";
+#add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 
 #hpkp - http public key pinning
 set $hpkp1 'pin-sha256="qDo23MpsRAXCSsMMvQRZ5WSa2IlR7p7xUFaN4roiPhQ=";';

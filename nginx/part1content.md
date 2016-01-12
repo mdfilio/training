@@ -293,7 +293,7 @@ noted in the logs for the proxy connection between nginx and apache.
 
 mod_aclr2 is what allows apache to respond to headers that nginx adds so that
 web traffic will flow through the apache modules and process .htaccess files
-and on static files has nginx serve the files instead of apache.
+and on static files nginx serve the files instead of apache.
 
 If nginx is on, and their site has problems the solution is **not** to disable
 it. It is most likely mod_fcgid timeouts.
@@ -308,11 +308,11 @@ syntax in nginx is simple, but everything that you might want to do is now quite
 extensive.
 
 * **OSCP** - Online Certificate Status Protocol
-  * Checking for certificate is revoked
+  * Checking if a certificate is revokeds
 * **HSTS** - HTTP Strict Transport Security
   * Prevent man in the middle attacks
 * **HPKP** - HTTP Public Key Pinning
-  * If your CA is compromised
+  * If your CA is compromised or rogue CA issued certificates
 * **CSP** - Content Security Policy
   * To prevent XSS type attacks
 * **Set-Cookie** - An HTTP header
@@ -373,12 +373,9 @@ One liner to test oscp:
 echo QUIT | openssl s_client -connect filio.us:443 -status 2> /dev/null | grep -A 17 'OCSP response:' | grep -B 17 'Next Update'
 ```
 
-One liner to get base64 hash from csr for HPKP (broken up on the pipes):
+One liner to get base64 hash from csr for HPKP:
 ```
- openssl req -inform pem -pubkey -noout < filio.us.csr
-   | openssl pkey -pubin -outform der
-   | openssl dgst -sha256 -binary
-   | base64
+ openssl req -inform pem -pubkey -noout < filio.us.csr | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary| base64
 ```
 
 One example for a Content-Security-Policy header:
@@ -408,5 +405,14 @@ Enough headers anyone?
 * Does the site make extensive use of mod_rewrite rules?
 
 # nginx and linux kernel tunables
+
+If you have problems linux problems nginx, it usually comes down to a few key
+kernel tunables:
+
+* net.core.somaxconn
+* net.ipv4.ip_local_port_range
+* fs.file-max
+* fs.nr_open
+* net.ipv4.tcp_fin_timeout
 
 # Additional support considerations

@@ -267,12 +267,65 @@ nginx mainline is actively developed and nginx r7 plus is made from it, so
 in theory you should likely be using the mainline. If you want http2, you **have
 to use mainline.**
 
-# XVI. nginx vs Apache prefork/worker/event
+# XVI. how nginx works
 
-nginx uses a master process with workers. Each worker is single threaded and
-uses an event loop to process requests. The default worker_connections it allows
-is 1024. nginx is statically compiled and any functionality you want to use
-must be compiled in.
+* nginx uses a master process with workers.
+  * Each worker is single threaded, has a default of 1024 worker_connections,
+  and uses an event loop to process requests.
+* nginx is statically compiled and any functionality you want to use must be compiled in.
+  * You can verify module functionality using nginx -V:
+
+  ```
+  # nginx -V
+nginx version: nginx/1.9.9
+built by gcc 4.4.7 20120313 (Red Hat 4.4.7-16) (GCC)
+built with OpenSSL 1.0.1e-fips 11 Feb 2013
+TLS SNI support enabled
+configure arguments: --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-threads --with-stream --with-stream_ssl_module --with-http_slice_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-http_v2_module --with-cc-opt='-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic'
+  ```
+
+or at the following page if you are using nginx's prebuilt packages:
+
+[nginx.org/en/linux_packages.html](nginx.org/en/linux_packages.html)
+
+# nginx vs the Apache MPMs: prefork vs worker vs event
+
+The event based processing that nginx does essentially leap frogged apache's various processing models by starting from scratch rather than building on the existing architecture.
+
+**prefork**
+The majority of Apache servers we see are configured for the prefork MPM (multi-processing module) configured with mod_php. prefork in this context means,
+that apache has a preset of processes given how expensive forking a proecss is
+in cpu terms.
+
+As each of these processes contain all the code necessary to handle a request
+this makes them extremely heavy and often leads to a server running out of memory and MaxClients being a factor on configuration.
+
+KeepAlive connections also do not work well with apache when using this style
+of processing since it changes the process to a 1 to 1 relationship if the
+connections are held for any period of time.
+
+**worker**
+
+Worker tried to improve on prefork by using a hybrid approach to using processes and threads. However, php has been noted to not be thread safe and so you no longer want to use mod_php any longer and want to use a fastcgi handler (*I believe that there may be
+some debate to validity to this statement as some of the php documentation states that only certain modules are not thread safe, although I haven't taken the time to fully
+research it.*). In the past this was mod_fastcgi and a wrapper to php-cgi, but Redhat only implemented mod_fcgid. Once you go to wrapping php-cgi you have some problems:
+
+* This method no longer offers opcode cacheing.
+* php_flag and php_value no longer vaild in .htaccess or apache configuration
+
+Today, if you are doing this, php-fpm is the better implementation over a wrapper.
+
+**event (not marked stable until apache 2.4)**
+
+Event is the next evolution after worker and adds an additional thread to handle
+idle KeepAlive connections to not tie a thread to a single connection.
+
+Again you will want to use php-fpm to handle php a long with the newer
+mod_proxy_fcgi. Which might be limited to tcp sockets, but have not verified this.
+
+
+
+[Nginx's explanation](https://www.nginx.com/blog/nginx-vs-apache-our-view/)
 
 # nginx configuration
 

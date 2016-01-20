@@ -342,10 +342,40 @@ The primary contexts when dealing with web configurations are:
 Depending on the context, certain directives are allowed and may be overridden
 if a later directive occurs in a child context. Remember the last directive wins.
 
-# nginx worker and worker_connections
+The default nginx.conf starts off inside the main context and you add the other
+contexts as needed.
 
+# nginx master, workers and worker_connections
 
+As stated previously, nginx has a master process that then has workers that
+handle connections.
 
+The number of workers can equal the number of cores available by the processor
+or just leave at 1. The default number of worker_connections is equal to 1024,
+but can be raised.
+
+The total concurrent active connections is equal to:
+
+```
+worker_processes * worker_connections  ( 1 * 1024) as opposed to default of
+apache of 256.
+```
+
+One thing to note is if you have nginx as a reverse proxy in front of apache
+as in a Plesk configuration, you will likely need to take at least two kernel
+tunable changes.
+
+* Open the ephemeral port ranges as you'll have additional tcp connections between nginx and apache with: net.ipv4.ip_local_port_range
+
+* You will also likely need to raise the the number of files limit nginx has with
+worker_rlimit_nofile as a file descriptor would be used for each connection.
+(This implies that fs.file-max is high enough to handle this change.)
+  * A calculation you could use for this:
+```
+2 * (worker_processes * worker_connections ) + 128
+```
+The 128 is an arbitrary number I picked to provide some buffer. If you are
+also using the nginx cacheing you may need additional file descriptors.
 
 # nginx and php-fpm
 

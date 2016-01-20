@@ -307,8 +307,7 @@ connections are held for any period of time.
 **worker**
 
 Worker tried to improve on prefork by using a hybrid approach to using processes and threads. However, php has been noted to not be thread safe and so you no longer want to use mod_php any longer and want to use a fastcgi handler (*I believe that there may be
-some debate to validity to this statement as some of the php documentation states that only certain modules are not thread safe, although I haven't taken the time to fully
-research it.*). In the past this was mod_fastcgi and a wrapper to php-cgi, but Redhat only implemented mod_fcgid. Once you go to wrapping php-cgi you have some problems:
+some debate to validity to this statement now as some of the php documentation states that only certain modules are not thread safe, also since PHP 5.5.1 there is the zend thread safe support and there are notes of bug fixes that go all the way back to 5.1.0 although I haven't taken the time to fully research it*). Most found documentation discusses using mod_fastcgi and a wrapper to php-cgi, but Redhat only implemented mod_fcgid. Once you go to wrapping php-cgi you have some problems:
 
 * This method no longer offers opcode cacheing.
 * php_flag and php_value no longer vaild in .htaccess or apache configuration
@@ -321,15 +320,32 @@ Event is the next evolution after worker and adds an additional thread to handle
 idle KeepAlive connections to not tie a thread to a single connection.
 
 Again you will want to use php-fpm to handle php a long with the newer
-mod_proxy_fcgi. Which might be limited to tcp sockets, but have not verified this.
-
+mod_proxy_fcgi.
 
 
 [Nginx's explanation](https://www.nginx.com/blog/nginx-vs-apache-our-view/)
 
 # nginx configuration
 
+nginx configuration is broken into several blocks or contexts and within those
+contexts, you use directives to set configuration options.
+
+The primary contexts when dealing with web configurations are:
+
+
+* main
+* events
+* http
+* server
+* location
+
+Depending on the context, certain directives are allowed and may be overridden
+if a later directive occurs in a child context. Remember the last directive wins.
+
 # nginx worker and worker_connections
+
+
+
 
 # nginx and php-fpm
 

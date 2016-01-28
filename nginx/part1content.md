@@ -161,7 +161,7 @@ What may be the next protocol?
 
 # IX. HTTP 2 as it is in nginx
 
-* 1.9.5-9 is built against 1.0.1 OpenSSL.
+* 1.9.[56789] is built against 1.0.1 OpenSSL.
 * Only built for incoming connections not backend. Also only with ssl enabled.
 * No server push yet.
 * Likely have 15 - 20% gain over just https.
@@ -307,15 +307,19 @@ or at the following page if you are using nginx's prebuilt packages:
 
 # nginx vs the Apache MPMs: prefork vs worker vs event
 
-The event based processing that nginx does essentially leap frogged apache's various processing models by starting from scratch rather than building on the existing architecture.
+The processing methodology nginx uses leap frogged apache's various processing
+models by starting from scratch to use an asynchronous non blocking
+event driven architecture rather than building on the apache model.
 
 **prefork**
-The majority of Apache servers we see are configured for the prefork MPM (multi-processing module) configured with mod_php. prefork in this context means,
-that apache has a preset of processes given how expensive forking a proecss is
-in cpu terms.
+The majority of Apache servers we see are configured for the prefork MPM
+(multi-processing module) configured with mod_php. prefork in this context means,
+that apache has a preset number of processes so that it can grow a bit more
+ easily given how expensive forking a proecss is in cpu terms.
 
 As each of these processes contain all the code necessary to handle a request
-this makes them extremely heavy and often leads to a server running out of memory and MaxClients being a factor on configuration.
+this makes them extremely heavy and often leads to a server running out of
+ memory and so this is why MaxClients is a factor with configuration.
 
 KeepAlive connections also do not work well with apache when using this style
 of processing since it changes the process to a 1 to 1 relationship if the
@@ -323,13 +327,23 @@ connections are held for any period of time.
 
 **worker**
 
-Worker tried to improve on prefork by using a hybrid approach to using processes and threads. However, php has been noted to not be thread safe and so you no longer want to use mod_php any longer and want to use a fastcgi handler (*I believe that there may be
-some debate to validity to this statement now as some of the php documentation states that only certain modules are not thread safe, also since PHP 5.5.1 there is the zend thread safe support and there are notes of bug fixes that go all the way back to 5.1.0 although I haven't taken the time to fully research it*). Most found documentation discusses using mod_fastcgi and a wrapper to php-cgi, but Redhat only implemented mod_fcgid. Once you go to wrapping php-cgi you have some problems:
+Worker tried to improve on prefork by using a hybrid approach to using processes
+and threads. However, php has been noted to not be thread safe which would prevent
+you to use mod_php and thus you would switch to a fastcgi handler (*I believe that
+there may be some debate to validity to this statement now as some of the php
+documentation states that only certain modules are not thread safe, also since
+PHP 5.5.1 there is zend thread safe support and there are notes of bug fixes
+that go all the way back to 5.1.0 although I haven't taken the time to fully
+research it*). Most found documentation discusses using mod_fastcgi and a
+wrapper to php-cgi, but Redhat only implemented mod_fcgid. So if you only make use
+of standard RHEL packages you will need to use mod_fcgid instead. Once you wrap
+php-cgi you have some problems:
 
-* This method no longer offers opcode cacheing.
+* This method no longer offers reliable opcode cacheing since the processes are
+  destroyed frequently.
 * php_flag and php_value no longer vaild in .htaccess or apache configuration
 
-Today, if you are doing this, php-fpm is the better implementation over a wrapper.
+Today, if you are doing this, php-fpm is a better implementation over a wrapper.
 
 **event (not marked stable until apache 2.4)**
 
@@ -348,7 +362,6 @@ nginx configuration is broken into several blocks or contexts and within those
 contexts, you use directives to set configuration options.
 
 The primary contexts when dealing with web configurations are:
-
 
 * main
 * events
@@ -379,19 +392,20 @@ apache of 256.
 ```
 
 One thing to note is if you have nginx as a reverse proxy in front of apache
-as in a Plesk configuration, you will likely need to take at least two kernel
+as in a Plesk configuration, you will likely need to make at least two kernel
 tunable changes.
 
-* Open the ephemeral port ranges as you'll have additional tcp connections between nginx and apache with: net.ipv4.ip_local_port_range
+* Open the ephemeral port ranges as you'll have additional tcp connections
+ between nginx and apache with: net.ipv4.ip_local_port_range
 
 * You will also likely need to raise the the number of files limit nginx has with
 worker_rlimit_nofile as a file descriptor would be used for each connection.
 (This implies that fs.file-max is high enough to handle this change.)
   * A calculation you could use for this:
 ```
-2 * (worker_processes * worker_connections ) + 128
+2 * (worker_processes * worker_connections ) + 1024
 ```
-The 128 is an arbitrary number I picked to provide some buffer. If you are
+The 1024 is an arbitrary number I picked to provide some buffer. If you are
 also using the nginx cacheing you may need additional file descriptors.
 
 # nginx and php-fpm
@@ -426,7 +440,7 @@ syntax in nginx is simple, but everything that you might want to do is now quite
 extensive.
 
 * **OSCP** - Online Certificate Status Protocol
-  * Checking if a certificate is revokeds
+  * Checking if a certificate is revoked
 * **HSTS** - HTTP Strict Transport Security
   * Prevent man in the middle attacks
 * **HPKP** - HTTP Public Key Pinning
@@ -524,8 +538,8 @@ Enough headers anyone?
 
 # nginx and linux kernel tunables
 
-If you have problems linux problems nginx, it usually comes down to a few key
-kernel tunables:
+If you have problems with nginx, it usually comes down to a few key
+linux kernel tunables to correct:
 
 * net.core.somaxconn
 * net.ipv4.ip_local_port_range

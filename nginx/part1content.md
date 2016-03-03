@@ -161,7 +161,7 @@ What may be the next protocol?
 
 # IX. HTTP 2 as it is in nginx
 
-* 1.9.[56789] is built against 1.0.1 OpenSSL.
+* 1.9.x is built against 1.0.1 OpenSSL.
 * Only built for incoming connections not backend. Also only with ssl enabled.
 * No server push yet.
 * Likely have 15 - 20% gain over just https.
@@ -410,7 +410,16 @@ also using the nginx cacheing you may need additional file descriptors.
 
 # nginx and php-fpm
 
+If you want to run php applications the most popular method is using php-fpm
+with the fastcgi module.
 
+There are two ways to communicate with php-fpm:
+  * unix socket
+  * tcp socket
+
+The unix socket will be faster in general, but the tcp socket can allow more
+scalability by allowing other servers to handle php handling via simple nginx
+load balancing with an upstream context.
 
 # Plesk, nginx, and Apache
 
@@ -546,5 +555,3 @@ linux kernel tunables to correct:
 * fs.file-max
 * fs.nr_open
 * net.ipv4.tcp_fin_timeout
-
-# Additional support considerations
